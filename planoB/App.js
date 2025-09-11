@@ -1,7 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 
-import Routes from "./src/navegadores/index";
+import Routes from "./src/navigation/index";
 import SignUpProvider from "./src/hooks/SignUpContext";
 import SignInProvider from "./src/hooks/SignInContext";
 import { NotificationProvider } from "./src/context/NotificationContext";

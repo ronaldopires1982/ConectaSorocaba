@@ -1,0 +1,118 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+
+# Native
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+
+# local env files
+.env*.local
+.env.local
+.env
+
+# typescript
+*.tsbuildinfo
+
+# Postman environment files (contém dados sensíveis)
+*.postman_environment.json
+*.postman_globals.json
+
+# 🔑 API KEYS & SECRETS
+*.key
+*.pem
+*.p12
+*.keystore
+key.properties
+
+# arquivos relacionados ao projeto e credenciais do Firebase (FCM)
+google-services.json
+GoogleService-Info.plist
+*firebase-adminsdk*.json
+firebase-debug.log
+firebase-debug.*.log
+
+# arquivo de configuração Firebase para Android (local da build - excluído do tracking do Git):
+android/app/google-services.json
+
+# arquivo de configuração Firebase para iOS (local da build - excluído do tracking do Git):
+ios/GoogleService-Info.plist
+
+# se houver certificados:
+config/certificates/*
+
+android/app/gradle.properties
+
+# exceções para instruções sobre configurações do Firebase para devs:
+!config/firebase/README.md
+!config/certificates/README.md
+
+# 📱 ANDROID SECURITY
+android/app/google-services.json
+android/app/debug.keystore
+android/app/release.keystore
+
+# 🍎 iOS SECURITY  
+ios/Pods/
+ios/**/*.xcodeproj/project.pbxproj
+ios/**/*.xcodeproj/xcshareddata/
+ios/**/*.xcworkspace/xcshareddata/
+ios/GoogleService-Info.plist
+
+# 📝 LOGS
+*.log
+logs/
+
+# 🗂️ TEMPORARY FILES
+.tmp/
+.temp/
+*.tmp
+*.temp
+
+# 💻 IDE FILES
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 🖥️ OS GENERATED FILES
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Play Store specific
+*.aab
+*.apk
+release-notes/
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# EAS Build artifacts
+dist/
+build-artifacts/

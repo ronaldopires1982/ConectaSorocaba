@@ -1,0 +1,56 @@
+{
+  "expo": {
+    "name": "App Central156",
+    "slug": "app-central156",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "remote-notification"
+        ]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/img/156.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.sorocaba.AppCentral156",
+      "googleServicesFile": "./config/firebase/google-services.json",
+      "permissions": [
+        "NOTIFICATIONS",
+        "VIBRATE",
+        "RECEIVE_BOOT_COMPLETED"
+      ],
+      "versionCode": 1
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./src/assets/img/156.png",
+          "color": "#004db3d9"
+        }
+      ]
+    ],
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a1d520f0-64ad-44ac-8d80-a8323ab1a0af"
+      }
+    },
+    "owner": "devmob.pms"
+  }
+}

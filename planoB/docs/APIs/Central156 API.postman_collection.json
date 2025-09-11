@@ -1,0 +1,1462 @@
+{
+	"info": {
+		"_postman_id": "12987e89-d026-4263-99ab-fd3ce2d30e3c",
+		"name": "Central156 API",
+		"description": "Complete API collection for Central156 system that manages citizen requests and services. This collection includes endpoints for managing services, notifications, device tokens, knowledge base, and citizen requests (cases) with attachments.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37211544"
+	},
+	"item": [
+		{
+			"name": "Autenticação (Django)",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic BASE64(client_id:client_secret)",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "19380988036",
+									"description": "CPF do munícipe\n",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "P@22w0rd",
+									"description": "Senha do munícipe",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{CLIENT_ID}}",
+									"description": "ID do client utilizado (App neste caso)",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{CLIENT_SECRET}}",
+									"description": "Senha do client ID utilizado",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{DJANGO_API}}/api/access_token/",
+							"host": [
+								"{{DJANGO_API}}"
+							],
+							"path": [
+								"api",
+								"access_token",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic BASE64(client_id:client_secret)",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "username",
+									"value": "97952680072",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "A12345678a!",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{CLIENT_ID}}",
+									"description": "ID do client utilizado (App neste caso)",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{CLIENT_SECRET}}",
+									"description": "Senha do client ID utilizado",
+									"type": "text"
+								},
+								{
+									"key": "token",
+									"value": "wgs7SBqMfeX0shTDAbSgevlS6NHJZZ",
+									"description": "Bearer token (obtido como access token no login)",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{DJANGO_API}}/api/revoke_token/",
+							"host": [
+								"{{DJANGO_API}}"
+							],
+							"path": [
+								"api",
+								"revoke_token",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Munícipes (Django)",
+			"item": [
+				{
+					"name": "Consultar munícipe",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "0yuBEmWozUWhJMcgkFvDSRQygXE4Rt",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{DJANGO_API}}/api/municipes/19380988036",
+							"host": [
+								"{{DJANGO_API}}"
+							],
+							"path": [
+								"api",
+								"municipes",
+								"19380988036"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar munícipe",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"bairro\":\"Vila Carvalho\",\r\n   \"celular\":\"(15) 91111-1666\",\r\n   \"cep\":\"18060-040\",\r\n   \"cidade\":\"Sorocaba\",\r\n   \"complemento\":\"\",\r\n   \"cpf\":\"97952680072\",\r\n   \"data_nascimento\":\"1940-04-01\",\r\n   \"description\":\"Cadastro via App156\",\r\n   \"email\":\"nathan@wec.com\",\r\n   \"estado\":\"SP\",\r\n   \"forma_contato\":\"email\",\r\n   \"nome\":\"Nathan\",\r\n   \"nome_social\":\"\",\r\n   \"numero\":\"654\",\r\n   \"password\":\"A12345678a!\",\r\n   \"password2\":\"A12345678a!\",\r\n   \"referencia\":\"\",\r\n   \"rua\":\"Rua Ema Zacchi Police\",\r\n   \"sobrenome\":\"Rothschild\",\r\n   \"tel_comercial\":\"\",\r\n   \"tel_residencial\":\"\",\r\n   \"tratamento\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DJANGO_API}}/api/municipes/criar/",
+							"host": [
+								"{{DJANGO_API}}"
+							],
+							"path": [
+								"api",
+								"municipes",
+								"criar",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar cadastro de munícipe",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "AV3mNhGpixZrUoLAHALUayhSBpXoEB",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"bairro\":\"Além Ponte\",\r\n   \"celular\":\"15998989898\",\r\n   \"cep\":\"18013280\",\r\n   \"cidade\":\"Sorocaba\",\r\n   \"complemento\":\"App1\",\r\n   \"cpf\":\"29436947895\",\r\n   \"email\":\"App156@gmail.com.br\",\r\n   \"logradouro\":\"Avenida Engenheiro Carlos Reinaldo Mendes\",\r\n   \"numero\":\"4000\",\r\n   \"referencia\":\"App156\",\r\n   \"tel_comercial\":\"3542316591\",\r\n   \"telres\":\"1535003500\",\r\n   \"uf\":\"SP\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{DJANGO_API}}/api/municipes/29436947895/editar/",
+							"host": [
+								"{{DJANGO_API}}"
+							],
+							"path": [
+								"api",
+								"municipes",
+								"29436947895",
+								"editar",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comdata",
+			"item": [
+				{
+					"name": "Pesquisar CEPs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://servicos.sorocaba.sp.gov.br/comdata/endereco/pesquisarporcep?cep=18013280",
+							"protocol": "https",
+							"host": [
+								"servicos",
+								"sorocaba",
+								"sp",
+								"gov",
+								"br"
+							],
+							"path": [
+								"comdata",
+								"endereco",
+								"pesquisarporcep"
+							],
+							"query": [
+								{
+									"key": "cep",
+									"value": "18013280",
+									"description": "CEP da localidade a pesquisar"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar UFs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://servicos.sorocaba.sp.gov.br/comdata/endereco/listarufs",
+							"protocol": "https",
+							"host": [
+								"servicos",
+								"sorocaba",
+								"sp",
+								"gov",
+								"br"
+							],
+							"path": [
+								"comdata",
+								"endereco",
+								"listarufs"
+							]
+						},
+						"description": "Listar UFs"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar localidades Combo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://servicos.sorocaba.sp.gov.br/comdata/endereco/listarlocalidadescombo?uf=SP",
+							"protocol": "https",
+							"host": [
+								"servicos",
+								"sorocaba",
+								"sp",
+								"gov",
+								"br"
+							],
+							"path": [
+								"comdata",
+								"endereco",
+								"listarlocalidadescombo"
+							],
+							"query": [
+								{
+									"key": "uf",
+									"value": "SP"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Solicitações",
+			"item": [
+				{
+					"name": "Listar grupos de serviço",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is array\", function () {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});",
+									"",
+									"// Store first group ID for other tests",
+									"if (pm.response.json().length > 0) {",
+									"    pm.environment.set('SERVICE_GROUP_ID', pm.response.json()[0].id);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-servicosNovaApp.php?consultarGrupoServ=1",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-servicosNovaApp.php"
+							],
+							"query": [
+								{
+									"key": "consultarGrupoServ",
+									"value": "1",
+									"description": "Flag para trazer todos os grupos de serviço"
+								}
+							]
+						},
+						"description": "Retrieves all available service groups from the system"
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar tipos de serviço por ID de grupo de serviço",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is valid JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"// Store first service type ID",
+									"var responseJson = pm.response.json();",
+									"if (responseJson.entry_list && responseJson.entry_list.length > 0) {",
+									"    pm.environment.set('SERVICE_TYPE_ID', responseJson.entry_list[0].id);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-servicosNovaApp.php?consultarTiposServ_idGrupoServ={{GROUP_ID_EXAMPLE}}",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-servicosNovaApp.php"
+							],
+							"query": [
+								{
+									"key": "consultarTiposServ_idGrupoServ",
+									"value": "{{GROUP_ID_EXAMPLE}}",
+									"description": "ID do grupo de serviço para filtrar os tipos de serviço"
+								}
+							]
+						},
+						"description": "Retrieves service types filtered by a specific service group ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar assuntos por ID de tipo de serviço",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is valid JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"// Store first subject ID",
+									"var responseJson = pm.response.json();",
+									"if (responseJson.entry_list && responseJson.entry_list.length > 0) {",
+									"    pm.environment.set('SUBJECT_ID', responseJson.entry_list[0].id);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-servicosNovaApp.php?consultarAssuntos_idTipoServ={{TASK_ID_EXAMPLE}}",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-servicosNovaApp.php"
+							],
+							"query": [
+								{
+									"key": "consultarAssuntos_idTipoServ",
+									"value": "{{TASK_ID_EXAMPLE}}",
+									"description": "ID do tipo de serviço para filtrar os assuntos"
+								}
+							]
+						},
+						"description": "Retrieves subjects filtered by a specific service type ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar assuntos por ID de grupo de serviço",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains group info\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('grupo_servico');",
+									"    pm.expect(jsonData).to.have.property('tipos_servico');",
+									"    pm.expect(jsonData).to.have.property('assuntos');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-servicosNovaApp.php?consultarAssuntos_idGrupoServ={{GROUP_ID_EXAMPLE}}",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-servicosNovaApp.php"
+							],
+							"query": [
+								{
+									"key": "consultarAssuntos_idGrupoServ",
+									"value": "{{GROUP_ID_EXAMPLE}}",
+									"description": "ID do grupo de serviço para filtrar todos os assuntos relacionados"
+								}
+							]
+						},
+						"description": "Retrieves all subjects related to a specific service group, including service types and subjects hierarchy"
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar solicitações por ID de munícipe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has status success\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('status');",
+									"    pm.expect(jsonData.status).to.equal('success');",
+									"});",
+									"",
+									"pm.test(\"Response has cases array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('cases');",
+									"    pm.expect(jsonData.cases).to.be.an('array');",
+									"});",
+									"",
+									"// Store first case info if available",
+									"var responseJson = pm.response.json();",
+									"if (responseJson.cases && responseJson.cases.length > 0) {",
+									"    var firstCase = responseJson.cases[0];",
+									"    pm.environment.set('CASE_ID', firstCase.id);",
+									"    if (firstCase.name_value_list && firstCase.name_value_list.protocolo_c) {",
+									"        pm.environment.set('PROTOCOL_NUMBER', firstCase.name_value_list.protocolo_c.value);",
+									"    }",
+									"}",
+									"",
+									"// Store first task info if available",
+									"if (responseJson.tasks && responseJson.tasks.length > 0) {",
+									"    pm.environment.set('TASK_ID', responseJson.tasks[0].id);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-lista-casesApp.php?id_municipe={{CITIZEN_ID_EXAMPLE}}",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-lista-casesApp.php"
+							],
+							"query": [
+								{
+									"key": "id_municipe",
+									"value": "{{CITIZEN_ID_EXAMPLE}}",
+									"description": "ID do cadastro do munícipe para filtrar as solicitações relacionadas"
+								}
+							]
+						},
+						"description": "Lists all cases (requests) for a specific citizen with attachments and tasks information"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar solicitação por protocolo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has status success\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('status');",
+									"    pm.expect(jsonData.status).to.equal('success');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-lista-casesApp.php?protocolo={{PROTOCOL_NUMBER_EXAMPLE}}",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-lista-casesApp.php"
+							],
+							"query": [
+								{
+									"key": "protocolo",
+									"value": "{{PROTOCOL_NUMBER_EXAMPLE}}",
+									"description": "Protocolo da solicitação para trazer dados da solicitação"
+								}
+							]
+						},
+						"description": "Retrieves a specific case by its protocol number"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar nova solicitação com anexos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has status success\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('status');",
+									"    pm.expect(jsonData.status).to.equal('success');",
+									"});",
+									"",
+									"pm.test(\"Response has case ID and protocol\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('protocolo_c');",
+									"    ",
+									"    // Store the protocol number for use in other requests",
+									"    pm.environment.set('CREATED_PROTOCOL', jsonData.protocolo_c);",
+									"    pm.environment.set('CREATED_CASE_ID', jsonData.id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_municipe\": \"{{CITIZEN_ID_EXAMPLE}}\",\n  \"assunto_sol\": \"Problema na coleta de lixo\",\n  \"descricao_sol\": \"O lixo não foi coletado na minha rua há 3 dias. A situação está causando mau cheiro e atraindo insetos.\",\n  \"endereco_sol\": \"Rua das Flores, 123\",\n  \"cep_sol\": \"18030-000\",\n  \"bairro_sol\": \"Centro\",\n  \"numero_sol\": \"123\",\n  \"cidade_sol\": \"Sorocaba\",\n  \"uf_sol\": \"SP\",\n  \"complemento_sol\": \"Apartamento 101\",\n  \"referencia_sol\": \"Próximo à padaria do João\",\n  \"id_assunto_sol\": \"{{SUBJECT_ID_EXAMPLE}}\",\n  \"latitude_sol\": \"-23.5015\",\n  \"longitude_sol\": \"-47.4526\",\n  \"anexos\": [\n    {\n      \"filename\": \"foto_problema.jpg\",\n      \"file_content\": \"{{BASE64_IMAGE}}\",\n      \"file_mime_type\": \"image/jpeg\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-inc-cases-newApp.php",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-inc-cases-newApp.php"
+							]
+						},
+						"description": "Creates a new case (citizen request) with optional file attachments"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar nova solicitação sem anexos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has status success\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('status');",
+									"    pm.expect(jsonData.status).to.equal('success');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_municipe\": \"{{CITIZEN_ID_EXAMPLE}}\",\n  \"assunto_sol\": \"Buraco na via pública\",\n  \"descricao_sol\": \"Há um buraco grande na Rua Principal que está causando danos aos veículos.\",\n  \"endereco_sol\": \"Rua Principal, 456\",\n  \"cep_sol\": \"18035-000\",\n  \"bairro_sol\": \"Vila Nova\",\n  \"numero_sol\": \"456\",\n  \"cidade_sol\": \"Sorocaba\",\n  \"uf_sol\": \"SP\",\n  \"id_assunto_sol\": \"{{SUBJECT_ID_EXAMPLE}}\",\n  \"latitude_sol\": \"-23.5025\",\n  \"longitude_sol\": \"-47.4530\"\n}"
+						},
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-inc-cases-newApp.php",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-inc-cases-newApp.php"
+							]
+						},
+						"description": "Creates a new case without any file attachments"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for managing services, service types, and subjects"
+		},
+		{
+			"name": "Gerenciamento de tokens de dispositivos",
+			"item": [
+				{
+					"name": "Registrar token de dispositivo com usuário",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has status property\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('status');",
+									"});",
+									"",
+									"pm.test(\"Action is valid\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.action) {",
+									"        pm.expect(['created', 'updated', 'unchanged']).to.include(jsonData.action);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"expoToken\": \"{{EXPO_TOKEN_EXAMPLE}}\",\n  \"userId\": \"{{CITIZEN_ID_EXAMPLE}}\",\n  \"device_type\": \"mobile\",\n  \"device_manufacturer\": \"Apple\",\n  \"device_model\": \"iPhone 14\",\n  \"device_os\": \"iOS\",\n  \"device_os_version\": \"16.0\"\n}"
+						},
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-register-device-tokenApp.php",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-register-device-tokenApp.php"
+							]
+						},
+						"description": "Registers or updates a device token for push notifications. Supports both authenticated and anonymous users."
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar token de dispositivo anônimo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has status property\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('status');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"expoToken\": \"ExponentPushToken[xxxxxxxxyxxxxxxxxxxxxx]\",\n  \"device_type\": \"mobile\",\n  \"device_manufacturer\": \"Samsung\",\n  \"device_model\": \"Galaxy S21\",\n  \"device_os\": \"Android\",\n  \"device_os_version\": \"13.0\"\n}"
+						},
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-register-device-tokenApp.php",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-register-device-tokenApp.php"
+							]
+						},
+						"description": "Registers a device token without user authentication (anonymous device)"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for managing device tokens for push notifications"
+		},
+		{
+			"name": "Notificações",
+			"item": [
+				{
+					"name": "Filtrar notificações por ID do munícipe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success property\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success');",
+									"});",
+									"",
+									"pm.test(\"Response has notifications array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('notifications');",
+									"    pm.expect(jsonData.notifications).to.be.an('array');",
+									"});",
+									"",
+									"// Store first notification ID if available",
+									"var responseJson = pm.response.json();",
+									"if (responseJson.notifications && responseJson.notifications.length > 0) {",
+									"    pm.environment.set('NOTIFICATION_ID', responseJson.notifications[0].messageId);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-notifications-historyApp.php?userId={{CITIZEN_ID_EXAMPLE}}",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-notifications-historyApp.php"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{CITIZEN_ID_EXAMPLE}}",
+									"description": "ID do munícipe para buscar o histórico de notificações"
+								}
+							]
+						},
+						"description": "Retrieves the notification history for a specific user"
+					},
+					"response": []
+				},
+				{
+					"name": "Marcar notificação como lida",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has success property\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success');",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Response has readTimestamp\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('readTimestamp');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"notificationId\": \"{{NOTIFICATION_ID_EXAMPLE}}\",\n  \"userId\": \"{{CITIZEN_ID_EXAMPLE}}\"\n}"
+						},
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-mark-notification-readApp.php",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-mark-notification-readApp.php"
+							]
+						},
+						"description": "Marks a specific notification as read"
+					},
+					"response": []
+				},
+				{
+					"name": "Processar aceite de resolução",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"notificationId\": \"{{NOTIFICATION_ID_EXAMPLE}}\",\r\n  \"responseType\": \"resolution_acceptance\",\r\n  \"accepted\": true,\r\n  \"userId\": \"{{CITIZEN_ID_EXAMPLE}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-response-notificationApp.php",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-response-notificationApp.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Processar informação adicional",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"notificationId\": \"{{NOTIFICATION_ID_EXAMPLE}}\",\r\n  \"responseType\": \"additional_info\",\r\n  \"responseText\": \"Informações solicitadas 2wewewew aqui...\",\r\n  \"attachments\": [\r\n    {\r\n      \"filename\": \"documento.pdf\",\r\n      \"file_mime_type\": \"application/pdf\", \r\n      \"file_content\": \"base64encodedcontent...\"\r\n    }\r\n  ],\r\n  \"userId\": \"{{CITIZEN_ID_EXAMPLE}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-response-notificationApp.php",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-response-notificationApp.php"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for managing push notifications"
+		},
+		{
+			"name": "Base de conhecimento (Knowledge Base)",
+			"item": [
+				{
+					"name": "Listar grupos de serviço",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is array\", function () {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-knowledgebaseApp.php",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-knowledgebaseApp.php"
+							]
+						},
+						"description": "Retrieves all service groups available in the knowledge base"
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar tipos de serviço e assuntos por ID de grupo de serviço",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has group info\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('grupo_servico');",
+									"    pm.expect(jsonData).to.have.property('tipos_servico');",
+									"    pm.expect(jsonData).to.have.property('assuntos');",
+									"});",
+									"",
+									"// Store first article ID if available",
+									"var responseJson = pm.response.json();",
+									"if (responseJson.assuntos && responseJson.assuntos.length > 0) {",
+									"    pm.environment.set('ARTICLE_ID', responseJson.assuntos[0].id);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-knowledgebaseApp.php?consultarArtigos_idGrupoServ={{GROUP_ID_EXAMPLE}}",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-knowledgebaseApp.php"
+							],
+							"query": [
+								{
+									"key": "consultarArtigos_idGrupoServ",
+									"value": "{{GROUP_ID_EXAMPLE}}",
+									"description": "ID do grupo de serviços para filtrar tipos de serviço e assuntos relacionados"
+								}
+							]
+						},
+						"description": "Retrieves knowledge base articles for a specific service group with performance metrics"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar artigo por ID de assunto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has article content\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('name');",
+									"    pm.expect(jsonData).to.have.property('artigo');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-knowledgebaseApp.php?consultarArtigo={{KB_SUBJECT_ID_EXAMPLE}}",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-knowledgebaseApp.php"
+							],
+							"query": [
+								{
+									"key": "consultarArtigo",
+									"value": "{{KB_SUBJECT_ID_EXAMPLE}}",
+									"description": "ID do assunto para trazer o artigo"
+								}
+							]
+						},
+						"description": "Retrieves a specific knowledge base article by its ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for accessing knowledge base articles"
+		},
+		{
+			"name": "Anexos",
+			"item": [
+				{
+					"name": "Filtrar anexos por solicitação",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has status success\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('status');",
+									"    pm.expect(jsonData.status).to.equal('success');",
+									"});",
+									"",
+									"pm.test(\"Response has attachments array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('attachments');",
+									"    pm.expect(jsonData.attachments).to.be.an('array');",
+									"});",
+									"",
+									"// Store first attachment info if available",
+									"var responseJson = pm.response.json();",
+									"if (responseJson.attachments && responseJson.attachments.length > 0) {",
+									"    var firstAttachment = responseJson.attachments[0];",
+									"    pm.environment.set('NOTE_ID', firstAttachment.note_id);",
+									"    pm.environment.set('FILENAME', firstAttachment.filename);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-get-attachmentsApp.php?record_id={{CASE_ID_EXAMPLE}}&module=Cases",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-get-attachmentsApp.php"
+							],
+							"query": [
+								{
+									"key": "record_id",
+									"value": "{{CASE_ID_EXAMPLE}}",
+									"description": "ID da solicitação para filtrar anexos"
+								},
+								{
+									"key": "module",
+									"value": "Cases",
+									"description": "Nome do módulo (Cases or Tasks)"
+								}
+							]
+						},
+						"description": "Retrieves all attachments for a specific case with detailed information including download URLs"
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar anexos por tarefa",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has status success\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('status');",
+									"    pm.expect(jsonData.status).to.equal('success');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-get-attachmentsApp.php?record_id=7f3691f9-f24d-ddad-f7cb-6859aa2f96d1&module=Tasks",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-get-attachmentsApp.php"
+							],
+							"query": [
+								{
+									"key": "record_id",
+									"value": "7f3691f9-f24d-ddad-f7cb-6859aa2f96d1",
+									"description": "ID da tarefa para filtrar anexos"
+								},
+								{
+									"key": "module",
+									"value": "Tasks",
+									"description": "Nome do módulo (Cases or Tasks)"
+								}
+							]
+						},
+						"description": "Retrieves all attachments for a specific task"
+					},
+					"response": []
+				},
+				{
+					"name": "Download de anexo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has file content\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.not.be.null;",
+									"    pm.expect(pm.response.headers.get('Content-Disposition')).to.include('attachment');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{SUITECRM_API}}/api-get-attachmentsApp.php?download=1&note_id={{NOTE_ID_EXAMPLE}}",
+							"host": [
+								"{{SUITECRM_API}}"
+							],
+							"path": [
+								"api-get-attachmentsApp.php"
+							],
+							"query": [
+								{
+									"key": "download",
+									"value": "1",
+									"description": "Flag para indicar que é um download"
+								},
+								{
+									"key": "note_id",
+									"value": "{{NOTE_ID_EXAMPLE}}",
+									"description": "ID do note que contém o arquivo para download"
+								},
+								{
+									"key": "filename",
+									"value": "{{FILENAME}}",
+									"description": "Name of the file to download",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Downloads a specific file attachment by note ID and filename"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for managing file attachments"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Global pre-request script",
+					"console.log('Executing request to:', pm.request.url.toString());"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Global test script",
+					"pm.test(\"Response time is less than 10000ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(10000);",
+					"});",
+					"",
+					"pm.test(\"Content-Type is present\", function () {",
+					"    pm.response.to.have.header(\"Content-Type\");",
+					"});"
+				]
+			}
+		}
+	]
+}

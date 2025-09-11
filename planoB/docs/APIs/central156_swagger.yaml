@@ -1,0 +1,1134 @@
+openapi: 3.0.3
+info:
+  title: Central156 API
+  description: |
+    Complete API collection for Central156 system that manages citizen requests and services. 
+    This collection includes endpoints for managing services, notifications, device tokens, 
+    knowledge base, and citizen requests (cases) with attachments.
+  version: 1.0.0
+  contact:
+    name: Central156 API Support
+    url: https://portal156-teste.sorocaba.sp.gov.br
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://portal156-teste.sorocaba.sp.gov.br/portal156
+    description: Django API Server (Test Environment)
+  - url: https://portal156-teste.sorocaba.sp.gov.br/custom/api/app
+    description: SuiteCRM API Server (Test Environment)
+  - url: https://servicos.sorocaba.sp.gov.br
+    description: Comdata Services
+
+security:
+  - BearerAuth: []
+  - BasicAuth: []
+
+paths:
+  # Authentication (Django)
+  /api/access_token/:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Authenticate user with CPF and password to get access token
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - grant_type
+                - username
+                - password
+                - client_id
+                - client_secret
+              properties:
+                grant_type:
+                  type: string
+                  enum: [password]
+                  example: password
+                username:
+                  type: string
+                  description: CPF do munícipe
+                  example: "19380988036"
+                password:
+                  type: string
+                  description: Senha do munícipe
+                  example: "P@22w0rd"
+                client_id:
+                  type: string
+                  description: ID do client utilizado (App neste caso)
+                client_secret:
+                  type: string
+                  description: Senha do client ID utilizado
+      responses:
+        "200":
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenResponse"
+        "400":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/revoke_token/:
+    post:
+      tags:
+        - Authentication
+      summary: User logout
+      description: Revoke access token and logout user
+      operationId: logout
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+                - client_id
+                - client_secret
+                - token
+              properties:
+                username:
+                  type: string
+                  example: "97952680072"
+                password:
+                  type: string
+                  example: "A12345678a!"
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                token:
+                  type: string
+                  description: Bearer token (obtido como access token no login)
+                  example: "wgs7SBqMfeX0shTDAbSgevlS6NHJZZ"
+      responses:
+        "200":
+          description: Token revoked successfully
+        "400":
+          description: Invalid request
+
+  # Citizens (Django)
+  /api/municipes/{cpf}:
+    get:
+      tags:
+        - Citizens
+      summary: Get citizen information
+      description: Retrieve citizen information by CPF
+      operationId: getCitizen
+      parameters:
+        - name: cpf
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "19380988036"
+      responses:
+        "200":
+          description: Citizen information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Citizen"
+        "404":
+          description: Citizen not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/municipes/criar/:
+    post:
+      tags:
+        - Citizens
+      summary: Register new citizen
+      description: Create a new citizen account
+      operationId: createCitizen
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CitizenRegistration"
+      responses:
+        "201":
+          description: Citizen created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Citizen"
+        "400":
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/municipes/{cpf}/editar/:
+    put:
+      tags:
+        - Citizens
+      summary: Update citizen information
+      description: Update existing citizen account information
+      operationId: updateCitizen
+      parameters:
+        - name: cpf
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "29436947895"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CitizenUpdate"
+      responses:
+        "200":
+          description: Citizen updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Citizen"
+        "400":
+          description: Invalid input data
+        "404":
+          description: Citizen not found
+
+  # Comdata Services
+  /comdata/endereco/pesquisarporcep:
+    get:
+      tags:
+        - Address Services
+      summary: Search address by ZIP code
+      description: Search for address information using ZIP code
+      operationId: searchByZipCode
+      security: []
+      parameters:
+        - name: cep
+          in: query
+          required: true
+          schema:
+            type: string
+          description: CEP da localidade a pesquisar
+          example: "18013280"
+      responses:
+        "200":
+          description: Address information found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddressInfo"
+
+  /comdata/endereco/listarufs:
+    get:
+      tags:
+        - Address Services
+      summary: List states (UFs)
+      description: Retrieve list of Brazilian states
+      operationId: listStates
+      security: []
+      responses:
+        "200":
+          description: List of states retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/State"
+
+  /comdata/endereco/listarlocalidadescombo:
+    get:
+      tags:
+        - Address Services
+      summary: List cities by state
+      description: Retrieve list of cities for a specific state
+      operationId: listCitiesByState
+      security: []
+      parameters:
+        - name: uf
+          in: query
+          required: true
+          schema:
+            type: string
+          example: "SP"
+      responses:
+        "200":
+          description: List of cities retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/City"
+
+  # Services
+  /api-servicosNovaApp.php:
+    get:
+      tags:
+        - Services
+      summary: Service operations
+      description: Multiple service-related operations based on query parameters
+      operationId: serviceOperations
+      parameters:
+        - name: consultarGrupoServ
+          in: query
+          schema:
+            type: string
+            enum: ["1"]
+          description: Flag para trazer todos os grupos de serviço
+        - name: consultarTiposServ_idGrupoServ
+          in: query
+          schema:
+            type: string
+          description: ID do grupo de serviço para filtrar os tipos de serviço
+        - name: consultarAssuntos_idTipoServ
+          in: query
+          schema:
+            type: string
+          description: ID do tipo de serviço para filtrar os assuntos
+        - name: consultarAssuntos_idGrupoServ
+          in: query
+          schema:
+            type: string
+          description: ID do grupo de serviço para filtrar todos os assuntos relacionados
+      responses:
+        "200":
+          description: Service data retrieved successfully
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/ServiceGroupList"
+                  - $ref: "#/components/schemas/ServiceTypeList"
+                  - $ref: "#/components/schemas/SubjectList"
+                  - $ref: "#/components/schemas/ServiceHierarchy"
+
+  # Cases/Requests
+  /api-lista-casesApp.php:
+    get:
+      tags:
+        - Cases
+      summary: List cases
+      description: List cases by citizen ID or search by protocol number
+      operationId: listCases
+      parameters:
+        - name: id_municipe
+          in: query
+          schema:
+            type: string
+          description: ID do cadastro do munícipe para filtrar as solicitações relacionadas
+        - name: protocolo
+          in: query
+          schema:
+            type: string
+          description: Protocolo da solicitação para trazer dados da solicitação
+      responses:
+        "200":
+          description: Cases retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaseListResponse"
+
+  /api-inc-cases-newApp.php:
+    post:
+      tags:
+        - Cases
+      summary: Create new case
+      description: Create a new citizen request with optional file attachments
+      operationId: createCase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CaseCreate"
+      responses:
+        "200":
+          description: Case created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaseCreateResponse"
+        "400":
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # Device Token Management
+  /api-register-device-tokenApp.php:
+    post:
+      tags:
+        - Device Management
+      summary: Register device token
+      description: Register or update a device token for push notifications
+      operationId: registerDeviceToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceTokenRegistration"
+      responses:
+        "200":
+          description: Device token registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceTokenResponse"
+
+  # Notifications
+  /api-notifications-historyApp.php:
+    get:
+      tags:
+        - Notifications
+      summary: Get notification history
+      description: Retrieve notification history for a specific user
+      operationId: getNotificationHistory
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: ID do munícipe para buscar o histórico de notificações
+      responses:
+        "200":
+          description: Notification history retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationHistoryResponse"
+
+  /api-mark-notification-readApp.php:
+    post:
+      tags:
+        - Notifications
+      summary: Mark notification as read
+      description: Mark a specific notification as read
+      operationId: markNotificationRead
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarkNotificationRead"
+      responses:
+        "200":
+          description: Notification marked as read successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarkNotificationResponse"
+
+  /api-response-notificationApp.php:
+    post:
+      tags:
+        - Notifications
+      summary: Respond to notification
+      description: Process notification responses (resolution acceptance or additional information)
+      operationId: respondToNotification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotificationResponse"
+      responses:
+        "200":
+          description: Notification response processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationResponseResult"
+
+  # Knowledge Base
+  /api-knowledgebaseApp.php:
+    get:
+      tags:
+        - Knowledge Base
+      summary: Knowledge base operations
+      description: Access knowledge base articles and service information
+      operationId: knowledgeBaseOperations
+      parameters:
+        - name: consultarArtigos_idGrupoServ
+          in: query
+          schema:
+            type: string
+          description: ID do grupo de serviços para filtrar tipos de serviço e assuntos relacionados
+        - name: consultarArtigo
+          in: query
+          schema:
+            type: string
+          description: ID do assunto para trazer o artigo
+      responses:
+        "200":
+          description: Knowledge base data retrieved successfully
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/ServiceGroup"
+                  - $ref: "#/components/schemas/KnowledgeBaseGroup"
+                  - $ref: "#/components/schemas/KnowledgeBaseArticle"
+
+  # Attachments
+  /api-get-attachmentsApp.php:
+    get:
+      tags:
+        - Attachments
+      summary: Get attachments or download file
+      description: Retrieve attachments for cases/tasks or download specific files
+      operationId: getAttachments
+      parameters:
+        - name: record_id
+          in: query
+          schema:
+            type: string
+          description: ID da solicitação ou tarefa para filtrar anexos
+        - name: module
+          in: query
+          schema:
+            type: string
+            enum: [Cases, Tasks]
+          description: Nome do módulo (Cases or Tasks)
+        - name: download
+          in: query
+          schema:
+            type: string
+            enum: ["1"]
+          description: Flag para indicar que é um download
+        - name: note_id
+          in: query
+          schema:
+            type: string
+          description: ID do note que contém o arquivo para download
+        - name: filename
+          in: query
+          schema:
+            type: string
+          description: Name of the file to download
+      responses:
+        "200":
+          description: Attachments retrieved or file downloaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttachmentListResponse"
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    BasicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        status:
+          type: string
+          enum: [error, failed]
+
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: "0yuBEmWozUWhJMcgkFvDSRQygXE4Rt"
+        token_type:
+          type: string
+          example: "Bearer"
+        expires_in:
+          type: integer
+          example: 3600
+        refresh_token:
+          type: string
+        scope:
+          type: string
+
+    Citizen:
+      type: object
+      properties:
+        cpf:
+          type: string
+          example: "19380988036"
+        nome:
+          type: string
+          example: "Nathan"
+        sobrenome:
+          type: string
+          example: "Rothschild"
+        email:
+          type: string
+          example: "nathan@wec.com"
+        celular:
+          type: string
+          example: "(15) 91111-1666"
+        data_nascimento:
+          type: string
+          format: date
+          example: "1940-04-01"
+        endereco:
+          $ref: "#/components/schemas/Address"
+
+    CitizenRegistration:
+      type: object
+      required:
+        - cpf
+        - nome
+        - sobrenome
+        - email
+        - password
+        - password2
+      properties:
+        cpf:
+          type: string
+          example: "97952680072"
+        nome:
+          type: string
+          example: "Nathan"
+        sobrenome:
+          type: string
+          example: "Rothschild"
+        nome_social:
+          type: string
+        email:
+          type: string
+          example: "nathan@wec.com"
+        password:
+          type: string
+          example: "A12345678a!"
+        password2:
+          type: string
+          example: "A12345678a!"
+        data_nascimento:
+          type: string
+          format: date
+          example: "1940-04-01"
+        celular:
+          type: string
+          example: "(15) 91111-1666"
+        tel_residencial:
+          type: string
+        tel_comercial:
+          type: string
+        forma_contato:
+          type: string
+          enum: [email, sms, telefone]
+          example: "email"
+        endereco:
+          $ref: "#/components/schemas/Address"
+        description:
+          type: string
+          example: "Cadastro via App156"
+        tratamento:
+          type: string
+
+    CitizenUpdate:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "App156@gmail.com.br"
+        celular:
+          type: string
+          example: "15998989898"
+        tel_comercial:
+          type: string
+          example: "3542316591"
+        telres:
+          type: string
+          example: "1535003500"
+        endereco:
+          $ref: "#/components/schemas/Address"
+
+    Address:
+      type: object
+      properties:
+        cep:
+          type: string
+          example: "18060-040"
+        logradouro:
+          type: string
+          example: "Rua Ema Zacchi Police"
+        rua:
+          type: string
+          example: "Rua Ema Zacchi Police"
+        numero:
+          type: string
+          example: "654"
+        complemento:
+          type: string
+        bairro:
+          type: string
+          example: "Vila Carvalho"
+        cidade:
+          type: string
+          example: "Sorocaba"
+        estado:
+          type: string
+          example: "SP"
+        uf:
+          type: string
+          example: "SP"
+        referencia:
+          type: string
+
+    AddressInfo:
+      type: object
+      properties:
+        cep:
+          type: string
+        logradouro:
+          type: string
+        bairro:
+          type: string
+        cidade:
+          type: string
+        uf:
+          type: string
+
+    State:
+      type: object
+      properties:
+        codigo:
+          type: string
+        nome:
+          type: string
+        sigla:
+          type: string
+
+    City:
+      type: object
+      properties:
+        codigo:
+          type: string
+        nome:
+          type: string
+        uf:
+          type: string
+
+    ServiceGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+
+    ServiceGroupList:
+      type: array
+      items:
+        $ref: "#/components/schemas/ServiceGroup"
+
+    ServiceType:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        group_id:
+          type: string
+
+    ServiceTypeList:
+      type: object
+      properties:
+        entry_list:
+          type: array
+          items:
+            $ref: "#/components/schemas/ServiceType"
+
+    Subject:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        service_type_id:
+          type: string
+
+    SubjectList:
+      type: object
+      properties:
+        entry_list:
+          type: array
+          items:
+            $ref: "#/components/schemas/Subject"
+
+    ServiceHierarchy:
+      type: object
+      properties:
+        grupo_servico:
+          $ref: "#/components/schemas/ServiceGroup"
+        tipos_servico:
+          type: array
+          items:
+            $ref: "#/components/schemas/ServiceType"
+        assuntos:
+          type: array
+          items:
+            $ref: "#/components/schemas/Subject"
+
+    CaseCreate:
+      type: object
+      required:
+        - id_municipe
+        - assunto_sol
+        - descricao_sol
+        - id_assunto_sol
+      properties:
+        id_municipe:
+          type: string
+        assunto_sol:
+          type: string
+          example: "Problema na coleta de lixo"
+        descricao_sol:
+          type: string
+          example: "O lixo não foi coletado na minha rua há 3 dias"
+        endereco_sol:
+          type: string
+          example: "Rua das Flores, 123"
+        cep_sol:
+          type: string
+          example: "18030-000"
+        bairro_sol:
+          type: string
+          example: "Centro"
+        numero_sol:
+          type: string
+          example: "123"
+        cidade_sol:
+          type: string
+          example: "Sorocaba"
+        uf_sol:
+          type: string
+          example: "SP"
+        complemento_sol:
+          type: string
+          example: "Apartamento 101"
+        referencia_sol:
+          type: string
+          example: "Próximo à padaria do João"
+        id_assunto_sol:
+          type: string
+        latitude_sol:
+          type: string
+          example: "-23.5015"
+        longitude_sol:
+          type: string
+          example: "-47.4526"
+        anexos:
+          type: array
+          items:
+            $ref: "#/components/schemas/FileAttachment"
+
+    FileAttachment:
+      type: object
+      required:
+        - filename
+        - file_content
+        - file_mime_type
+      properties:
+        filename:
+          type: string
+          example: "foto_problema.jpg"
+        file_content:
+          type: string
+          format: base64
+          description: Base64 encoded file content
+        file_mime_type:
+          type: string
+          example: "image/jpeg"
+
+    CaseCreateResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [success]
+        id:
+          type: string
+        protocolo_c:
+          type: string
+
+    CaseListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [success]
+        cases:
+          type: array
+          items:
+            $ref: "#/components/schemas/Case"
+        tasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Task"
+
+    Case:
+      type: object
+      properties:
+        id:
+          type: string
+        name_value_list:
+          type: object
+          properties:
+            protocolo_c:
+              type: object
+              properties:
+                value:
+                  type: string
+
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+
+    DeviceTokenRegistration:
+      type: object
+      required:
+        - expoToken
+        - device_type
+        - device_manufacturer
+        - device_model
+        - device_os
+        - device_os_version
+      properties:
+        expoToken:
+          type: string
+          example: "ExponentPushToken[xxxxxxxxyxxxxxxxxxxxxx]"
+        userId:
+          type: string
+          description: Optional user ID for authenticated devices
+        device_type:
+          type: string
+          enum: [mobile, tablet, desktop]
+          example: "mobile"
+        device_manufacturer:
+          type: string
+          example: "Apple"
+        device_model:
+          type: string
+          example: "iPhone 14"
+        device_os:
+          type: string
+          example: "iOS"
+        device_os_version:
+          type: string
+          example: "16.0"
+
+    DeviceTokenResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [success, error]
+        action:
+          type: string
+          enum: [created, updated, unchanged]
+        message:
+          type: string
+
+    NotificationHistoryResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        notifications:
+          type: array
+          items:
+            $ref: "#/components/schemas/Notification"
+
+    Notification:
+      type: object
+      properties:
+        messageId:
+          type: string
+        title:
+          type: string
+        body:
+          type: string
+        data:
+          type: object
+        timestamp:
+          type: string
+          format: date-time
+        read:
+          type: boolean
+
+    MarkNotificationRead:
+      type: object
+      required:
+        - notificationId
+        - userId
+      properties:
+        notificationId:
+          type: string
+        userId:
+          type: string
+
+    MarkNotificationResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        notificationId:
+          type: string
+        readTimestamp:
+          type: string
+          format: date-time
+
+    NotificationResponse:
+      type: object
+      required:
+        - notificationId
+        - responseType
+        - userId
+      properties:
+        notificationId:
+          type: string
+        responseType:
+          type: string
+          enum: [resolution_acceptance, additional_info]
+        accepted:
+          type: boolean
+          description: Required for resolution_acceptance type
+        responseText:
+          type: string
+          description: Required for additional_info type
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/FileAttachment"
+          description: Optional for additional_info type
+        userId:
+          type: string
+
+    NotificationResponseResult:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [success, error]
+        message:
+          type: string
+
+    KnowledgeBaseGroup:
+      type: object
+      properties:
+        grupo_servico:
+          $ref: "#/components/schemas/ServiceGroup"
+        tipos_servico:
+          type: array
+          items:
+            $ref: "#/components/schemas/ServiceType"
+        assuntos:
+          type: array
+          items:
+            $ref: "#/components/schemas/Subject"
+
+    KnowledgeBaseArticle:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        artigo:
+          type: string
+          description: Article content in HTML format
+
+    AttachmentListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [success]
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/AttachmentInfo"
+
+    AttachmentInfo:
+      type: object
+      properties:
+        note_id:
+          type: string
+        filename:
+          type: string
+        file_mime_type:
+          type: string
+        file_size:
+          type: integer
+        download_url:
+          type: string
+
+tags:
+  - name: Authentication
+    description: User authentication and session management
+  - name: Citizens
+    description: Citizen registration and profile management
+  - name: Address Services
+    description: Address lookup and location services
+  - name: Services
+    description: Service groups, types, and subjects management
+  - name: Cases
+    description: Citizen requests and case management
+  - name: Device Management
+    description: Device token registration for push notifications
+  - name: Notifications
+    description: Push notification management
+  - name: Knowledge Base
+    description: Knowledge base articles and information
+  - name: Attachments
+    description: File attachment management
+
+externalDocs:
+  description: Central156 Portal Documentation
+  url: https://portal156-teste.sorocaba.sp.gov.br/docs

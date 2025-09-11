@@ -1,0 +1,68 @@
+# Exclude node modules and other dev dependencies
+
+node_modules/
+.git/
+.github/
+.vscode/
+.idea/
+
+# Exclude iOS-specific files
+
+ios/
+
+# Exclude test files
+
+**tests**/
+_.test.js
+_.spec.js
+
+# Exclude documentation
+
+docs/
+docs/Screenshots
+
+# 🔥 FIREBASE SECURITY - Exclude sensitive Firebase files
+
+_firebase-adminsdk_.json
+firebase-debug.log
+firebase-debug.\*.log
+
+# Exclude debug info and build cache
+
+android/app/build/
+android/app/debug/
+android/app/.cxx/
+android/build/
+android/.gradle/
+android/local.properties
+
+# 🔐 CERTIFICATES & KEYS - Arquivos de certificados de segurança e chaves não devem ser enviados aos servidores da EAS, pois eles assinam com o próprio certificado
+
+_.keystore
+_.jks
+_.p8
+_.p12
+_.key
+_.pem
+key.properties
+config/certificates/
+
+# Exclude large assets not needed for the build
+
+assets/videos/
+assets/audio/
+
+# Exclude Expo web files if not needed
+
+web/
+
+# 📝 LOGS & DEBUG
+
+\*.log
+logs/
+
+# 🗂️ IDE & OS FILES
+
+.DS*Store\*
+.*\*
+Thumbs.db

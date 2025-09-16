@@ -10,6 +10,7 @@ import { DrawerActions } from "@react-navigation/native";
 // imports locais
 import {
   ButtonText,
+  CartaoCidadao,
   Colors,
   Line,
   StyledFormArea,
@@ -19,6 +20,7 @@ import {
 import { SignInContext } from "../../../hooks/SignInContext";
 import LogoHeader from "../../../components/LogoHeader";
 import { LogOut } from "../../../api/UserService";
+import CartaoCidadao from "../../../components/CartaoCidadao";
 
 // imports de hooks
 import useStorage from "../../../hooks/useStorage";
@@ -78,6 +80,7 @@ export const Welcome = ({ navigation }) => {
             marginTop: 80,
           }}
         >
+          <CartaoCidadao />
           <LogoHeader />
         </View>
 

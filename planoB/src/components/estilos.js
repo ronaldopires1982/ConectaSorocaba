@@ -47,6 +47,10 @@ export const ButtonText = Styled.Text`
   font-size: 18px;
 `;
 
+export const StyledCartaoCidadao = Styled.Image`
+  width: 80%
+`;
+
 export const ExtraText = Styled.Text`
   justify-content: center;
   align-content: center;

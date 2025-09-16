@@ -47,10 +47,6 @@ export const ButtonText = Styled.Text`
   font-size: 18px;
 `;
 
-export const StyledCartaoCidadao = Styled.Image`
-  width: 80%
-`;
-
 export const ExtraText = Styled.Text`
   justify-content: center;
   align-content: center;
@@ -151,7 +147,7 @@ export const StyledButton = Styled.TouchableOpacity`
   align-items: center;
   border-radius: 5px;
   margin-vertical: 5px;
-  height: ${(props) => (props.height ? `height: ${props.height}px;` : 100)}px;
+  height: ${(props) => (props.height ? props.height : 100)}px;
 `;
 
 export const StyledButtonLogin = Styled.TouchableOpacity`

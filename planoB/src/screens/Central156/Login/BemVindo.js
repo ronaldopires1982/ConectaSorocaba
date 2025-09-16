@@ -8,30 +8,16 @@ import { Feather } from "@expo/vector-icons";
 import { DrawerActions } from "@react-navigation/native";
 
 // imports locais
-import {
-  ButtonText,
-  CartaoCidadao,
-  Colors,
-  Line,
-  StyledFormArea,
-  StyledButton,
-  StyledButtonLogout,
-} from "../../../components/estilos";
+import { ButtonText, Colors, StyledButton } from "../../../components/estilos";
 import { SignInContext } from "../../../hooks/SignInContext";
-import LogoHeader from "../../../components/LogoHeader";
-import { LogOut } from "../../../api/UserService";
-import CartaoCidadao from "../../../components/CartaoCidadao";
+import CartaoCidadaoComponent from "../../../components/CartaoCidadao";
 
 // imports de hooks
 import useStorage from "../../../hooks/useStorage";
-import { set } from "react-hook-form";
 
 const { brand, primary } = Colors;
 
 export const Welcome = ({ navigation }) => {
-  const { clearItem, getItem } = useStorage();
-  const { logContextOut } = useContext(SignInContext);
-
   return (
     <View
       style={{
@@ -70,7 +56,7 @@ export const Welcome = ({ navigation }) => {
           backgroundColor: "transparent",
         }}
       >
-        {/* View do LogoHeader */}
+        {/* View do Cartão Cidadão */}
         <View
           style={{
             width: "100%",
@@ -80,8 +66,7 @@ export const Welcome = ({ navigation }) => {
             marginTop: 80,
           }}
         >
-          <CartaoCidadao />
-          <LogoHeader />
+          <CartaoCidadaoComponent />
         </View>
 
         {/* View dos botões */}

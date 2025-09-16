@@ -14,30 +14,24 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "UIBackgroundModes": [
-          "remote-notification"
-        ]
+        "UIBackgroundModes": ["remote-notification"]
       }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/img/156.png",
+        "foregroundImage": "./assets/img/156.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.sorocaba.AppCentral156",
       "googleServicesFile": "./config/firebase/google-services.json",
-      "permissions": [
-        "NOTIFICATIONS",
-        "VIBRATE",
-        "RECEIVE_BOOT_COMPLETED"
-      ],
+      "permissions": ["NOTIFICATIONS", "VIBRATE", "RECEIVE_BOOT_COMPLETED"],
       "versionCode": 1
     },
     "plugins": [
       [
         "expo-notifications",
         {
-          "icon": "./src/assets/img/156.png",
+          "icon": "./assets/img/156.png",
           "color": "#004db3d9"
         }
       ]

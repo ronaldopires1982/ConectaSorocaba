@@ -8,11 +8,11 @@ const LogoHeader = () => {
     <View>
       <Avatar
         resizeMode="cover"
-        source={require("../assets/img/logopms.jpg")}
+        source={require("../../assets/img/logopms.jpg")}
       />
       <PageLogo
         resizeMode="contain"
-        source={require("../assets/img/central156.png")}
+        source={require("../../assets/img/central156.png")}
       />
     </View>
   );

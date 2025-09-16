@@ -216,7 +216,7 @@ function DrawerContent(props) {
                     alignSelf: "left",
                   }}
                   resizeMode="contain"
-                  source={require("../assets/img/Central156_com_brasao.png")}
+                  source={require("../../assets/img/Central156_com_brasao.png")}
                 />
                 <View
                   style={{

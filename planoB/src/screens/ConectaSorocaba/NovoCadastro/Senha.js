@@ -56,7 +56,7 @@ const SignUpPassword = ({ navigation }) => {
   });
 
   const CadastroMunicipe = async () => {
-    console.log("formData:", formData);
+    console.log("[Senha.js] - formData:", formData);
     setModalLoadingVisible(true);
     setIsLoading(true);
     const dadosMunicipe = {
@@ -87,7 +87,7 @@ const SignUpPassword = ({ navigation }) => {
     };
 
     CadastrarNovoMunicipe(dadosMunicipe).then((res) => {
-      console.log("CadastroSenha.js - resposta da chamada API:", res);
+      console.log("[Senha.js] - resposta da chamada API:", res);
 
       if (res.status == 200 || res.status == 201) {
         setUserDetails({
@@ -108,7 +108,7 @@ const SignUpPassword = ({ navigation }) => {
   };
 
   const checkPasswordMatch = (passwd1, passwd2) => {
-    console.log("password:", passwd1, "confirmPassword:", passwd2);
+    console.log("[Senha.js] - password:", passwd1, "confirmPassword:", passwd2);
     passwd1 === passwd2 ? setPasswordMatch(true) : setPasswordMatch(false);
   };
 
@@ -193,7 +193,6 @@ const SignUpPassword = ({ navigation }) => {
                       onChange(text);
                       updateFormData({ confirmPassword: text });
                       checkPasswordMatch(formData.password, text);
-                      // console.log(passwordMatch);
                     }}
                     value={value}
                     border={!passwordMatch}

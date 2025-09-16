@@ -21,11 +21,11 @@ import { EscolhaAssunto } from "../screens/Central156/NovaSolicitacao/EscolhaAss
 import { FormSolicitacao } from "../screens/Central156/NovaSolicitacao/FormSolicitacao";
 import { AnexarArquivos } from "../screens/Central156/NovaSolicitacao/AnexarArquivos";
 import { MinhasSolicitacoes } from "../screens/Central156/MinhasSolicitacoes/MinhasSolicitacoes";
-import SignUp from "../screens/Central156/CadastroMunicipe/CadastroDadosPessoais";
-import SignUpContacts from "../screens/Central156/CadastroMunicipe/CadastroDadosContato";
-import SignUpAddress from "../screens/Central156/CadastroMunicipe/CadastroEndereco";
-import SignUpTerms from "../screens/Central156/CadastroMunicipe/CadastroTermosUso";
-import SignUpPassword from "../screens/Central156/CadastroMunicipe/CadastroSenha";
+import SignUp from "../screens/ConectaSorocaba/NovoCadastro/DadosPessoais";
+import SignUpContacts from "../screens/ConectaSorocaba/NovoCadastro/DadosContato";
+import SignUpAddress from "../screens/ConectaSorocaba/NovoCadastro/Endereco";
+import SignUpTerms from "../screens/ConectaSorocaba/NovoCadastro/TermosUso";
+import SignUpPassword from "../screens/ConectaSorocaba/NovoCadastro/Senha";
 import ConsultaProtocolo from "../screens/Central156/ConsultaProtocolo/ConsultaProtocolo";
 import MenuGrupoServ from "../screens/Central156/CartaServicos/MenuGrupoServ";
 import ListarAssuntos from "../screens/Central156/CartaServicos/ListaAssuntos";

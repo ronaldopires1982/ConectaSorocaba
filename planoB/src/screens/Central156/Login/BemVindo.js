@@ -52,14 +52,15 @@ export const Welcome = ({ navigation }) => {
         style={{
           flex: 1,
           justifyContent: "center",
-          width: "80%",
+          alignItems: "center",
+          width: "100%",
           backgroundColor: "transparent",
         }}
       >
         {/* View do Cartão Cidadão */}
         <View
           style={{
-            width: "100%",
+            width: "90%",
             flex: 1 / 4,
             justifyContent: "center",
             padding: 20,
@@ -72,7 +73,7 @@ export const Welcome = ({ navigation }) => {
         {/* View dos botões */}
         <View
           style={{
-            width: "100%",
+            width: "80%",
             padding: 10,
             flex: 3 / 4,
             alignItems: "center",

@@ -1,5 +1,3 @@
-// src/view/CadastroMunicipe/CadastroTermosUso.js
-
 //imports nativos
 import React, { useContext, useState } from "react";
 import {

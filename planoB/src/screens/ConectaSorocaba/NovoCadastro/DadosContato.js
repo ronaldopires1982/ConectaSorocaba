@@ -48,10 +48,7 @@ const SignUpContacts = ({ navigation }) => {
   });
 
   useEffect(() => {
-    console.log(
-      "CadastroDadosContato.js - Erros de preenchimento: ",
-      errors.email
-    );
+    console.log("[DadosContato.js] - Erros de preenchimento: ", errors.email);
   }, [errors.email]);
 
   const onSubmit = (data) => {

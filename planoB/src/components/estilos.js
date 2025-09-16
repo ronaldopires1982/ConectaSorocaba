@@ -119,12 +119,6 @@ export const RightIcon = Styled.TouchableOpacity`
   z-index: 1;
 `;
 
-export const SignupTimeline = Styled.View`
-height: 3px;
-background-color: ${darkLight};
-width: 80%;
-`;
-
 export const SubTitle = Styled.Text`
   font-size: 18px;
   margin-bottom: 20px;
@@ -253,15 +247,4 @@ export const TextLinkContent = Styled.Text`
   color: ${brand};
   font-size: ${(props) => props.fontSize || 18}px;
   padding-horizontal: 5px;
-`;
-
-export const WelcomeContainer = Styled(InnerContainer)`
-  padding: 25px;
-  padding-top: 10px;
-  justify-content: center;
-`;
-
-export const WelcomeImage = Styled.Image`
-  height: 30%;
-  min-width: 50%;
 `;

@@ -60,26 +60,6 @@ const SignUp = ({ navigation }) => {
       cpf: data.cpf.replace(/\D/g, ""), //remove todos os caracteres não numéricos
       datanasc: data.datanasc.replace(/\D/g, ""),
     });
-    //     setModalVisible(true);
-    //
-    //     ChecarMunicipeCadastrado(data.cpf.replace(/\D/g, ""))
-    //       .then((result) => {
-    //         console.log("Checking municipe result:", result);
-    //         if (result.exists) {
-    //           setModalVisible(false);
-    //           Alert.alert(
-    //             "Erro de cadastro",
-    //             "O CPF informado já possui cadastro. Verifique se não há erros de digitação ou cadastre-se com outro CPF."
-    //           );
-    //           return;
-    //         } else {
-    //           setModalVisible(false);
-    //           navigation.navigate("SignUpContacts");
-    //         }
-    //       })
-    //       .catch((error) => {
-    //         console.error("Error checking municipe:", error);
-    //       });
     navigation.navigate("SignUpContacts");
   };
 
@@ -155,7 +135,6 @@ const SignUp = ({ navigation }) => {
                 },
                 validate: (value) => {
                   if (value.replace(/\D/g, "").length === 11) {
-                    // console.log("inside validation hook form", value);
                     return validateCPF(value);
                   }
                   return "O CPF deve conter 11 dígitos.";

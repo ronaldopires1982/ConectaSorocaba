@@ -53,13 +53,13 @@ const SignUpAddress = ({ navigation }) => {
     },
   });
   const preencherViaCEP = (cep) => {
-    console.log("CadastroEndereço.js - função preencherViaCEP ativada");
+    console.log("[Endereço.js] - função preencherViaCEP ativada");
     setModalLoadingVisible(true);
     isSetSubmitting(true);
 
     buscaCEP(cep)
       .then((res) => {
-        console.log("[CadastroEndereço.js] - Resposta da API:", res);
+        console.log("[Endereço.js] - Resposta da API:", res);
         if (res.length === 0) {
           alert("CEP não encontrado.");
           setValue("endereco", "");

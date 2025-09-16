@@ -1,8 +1,7 @@
 // src/components/CartaoCidadao.js
 import React, { useContext } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { SignInContext } from "../hooks/SignInContext";
-import { StyledCartaoCidadao } from "./estilos";
 
 const CartaoCidadaoComponent = () => {
   const { user } = useContext(SignInContext);
@@ -24,9 +23,9 @@ const CartaoCidadaoComponent = () => {
   return (
     <View style={styles.container}>
       {/* Imagem do cartão em background */}
-      <StyledCartaoCidadao
+      <Image
         source={require("../../assets/img/cartao_cidadao.png")}
-        resizeMode="contain"
+        resizeMode="cover"
         style={styles.cardImage}
       />
 
@@ -47,12 +46,19 @@ const styles = StyleSheet.create({
   container: {
     position: "relative",
     width: "100%",
-    height: 200, // Adjust based on your card image dimensions
-    alignItems: "center",
-    justifyContent: "center",
+    aspectRatio: 1.6, // Mantém a proporção do cartão (largura:altura)
+    alignSelf: "center", // alinha o cartão horizontalmente
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   cardImage: {
     width: "100%",
+    height: "100%",
+    borderRadius: 15, //mantendo a consistência do arredondamento com o container
   },
   overlay: {
     position: "absolute",
@@ -60,26 +66,30 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 40,
-    paddingVertical: 20,
+    justifyContent: "flex-end",
+    alignItems: "flex-start",
   },
   userInfoContainer: {
-    flex: 1,
-    paddingLeft: 15,
-    justifyContent: "center",
+    paddingLeft: 20,
+    paddingBottom: 20,
+    paddingRight: 20,
   },
   userName: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#333333",
-    marginBottom: 5,
+    color: "#000000",
+    marginBottom: 4,
+    textShadowColor: "rgba(255, 255, 255, 0.8)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   userCPF: {
     fontSize: 14,
-    color: "#666666",
-    fontFamily: "monospace", // For better number readability
+    color: "#333333",
+    fontFamily: "monospace", // Tipo de fonte adequada para números
+    textShadowColor: "rgba(255, 255, 255, 0.8)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
 });
 

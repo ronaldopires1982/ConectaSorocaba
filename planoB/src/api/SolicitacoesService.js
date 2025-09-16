@@ -167,12 +167,6 @@ function processApiResponse(apiData, notifications = []) {
     const assuntoId = caseItem.name_value_list.a01_assunto_id_c?.value;
     const nomeOriginal = caseItem.name_value_list.name.value;
 
-    // console.log(`[SolicitacoesService.js] - Protocolo ${protocolo}:`, {
-    //   assuntoId,
-    //   assuntoName,
-    //   nomeOriginal,
-    // });
-
     // Coleta todas as notes relacionadas ao case
     const relatedNotes = [];
 

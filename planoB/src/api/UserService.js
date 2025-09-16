@@ -72,8 +72,6 @@ export const RecuperarSenha = async (cpfLimpo) => {
       });
 
       const data = response.data;
-      // console.log("Response data:", data);
-      // console.log("Full response:", response);
 
       if (response.status === 200 && data) {
         const maskEmail = (email) => {

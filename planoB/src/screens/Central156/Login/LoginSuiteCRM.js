@@ -111,8 +111,8 @@ export const LoginSuiteCRM = ({ navigation }) => {
   };
 
   /**
-   * Handle login process using Django API.
-   * @param {Object} formData - The form data containing CPF and password.
+   * Faz o processo de login através da API Django
+   * @param {Object} formData - Objeto que contém os dados de CPF e senha
    */
   const handleDjangoLogin = async (formData) => {
     if (isLoading) return; // Previne envios multiplos e re-renderizações enquanto o login está em andamento
@@ -135,13 +135,11 @@ export const LoginSuiteCRM = ({ navigation }) => {
       );
 
       if (result && result.status === "sucesso") {
-        // Save access and refresh tokens to storage
-        // First save tokens to storage
+        // Armazena tokens de acesso e refresh no AsyncStorage
         await saveItem("@access_token", result.tokens.access_token);
         await saveItem("@refresh_token", result.tokens.refresh_token);
 
-        // Update user context with retrieved data
-        // Handle successful login by updating user context
+        // Atualiza o contexto de usuário com os dados do municipe recebidos no retorno da API
         const municipeData = result.dadosMunicipe;
         logIn({
           idMunicipe: municipeData.sistema.crm_id,
@@ -172,15 +170,15 @@ export const LoginSuiteCRM = ({ navigation }) => {
           routes: [{ name: "Welcome" }],
         });
       } else {
-        // Display error alert if login fails
+        // Exibe alerta de erro genérico se o login falhar
         Alert.alert(
           "Erro de login",
           result.message || "Erro ao realizar login"
         );
-        console.log("LoginSuiteCRM: Login falhou!");
+        console.log("[LoginSuiteCRM] - Login falhou!");
       }
     } catch (error) {
-      // Log and alert the error
+      // Loga e exibe o erro no console
       console.error("Erro no handleDjangoLogin:", error);
       Alert.alert("Erro", "Ocorreu um erro durante o login. Tente novamente.");
     } finally {
@@ -322,7 +320,6 @@ export const LoginSuiteCRM = ({ navigation }) => {
               >
                 <TextLink
                   onPress={async () => {
-                    // RecuperaSenha(getValues("cpf").replace(/\D/g, ""));
                     url =
                       "https://portal156-teste.sorocaba.sp.gov.br/portal156/accounts/password_reset/";
                     const supported = await Linking.canOpenURL(url);

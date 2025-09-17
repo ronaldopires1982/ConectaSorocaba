@@ -77,12 +77,12 @@ const DrawerItems = ({ isLoggedIn }) => {
         },
       ]
     : [
-        {
-          icon: "account-circle-outline",
-          label: "Meu cadastro",
-          navigateTo: "Profile",
-          isExternalLink: false,
-        },
+        // {
+        //   icon: "account-circle-outline",
+        //   label: "Meu cadastro",
+        //   navigateTo: "Profile",
+        //   isExternalLink: false,
+        // },
         {
           icon: "plus-circle-outline",
           label: "Nova solicitação",
@@ -101,12 +101,12 @@ const DrawerItems = ({ isLoggedIn }) => {
           navigateTo: "NotificationsScreen",
           isExternalLink: false,
         },
-        {
-          icon: "file-search-outline",
-          label: "Consulta por Protocolo",
-          navigateTo: "ConsultaProtocolo",
-          isExternalLink: false,
-        },
+        // {
+        //   icon: "file-search-outline",
+        //   label: "Consulta por Protocolo",
+        //   navigateTo: "ConsultaProtocolo",
+        //   isExternalLink: false,
+        // },
         {
           icon: "script-text-outline",
           label: "Carta de Serviços",
@@ -209,7 +209,7 @@ function DrawerContent(props) {
           <TouchableOpacity activeOpacity={0.8}>
             <View style={styles.userInfoSection}>
               <View style={{ flexDirection: "row", marginTop: 15 }}>
-                <PageLogo
+                {/* <PageLogo
                   style={{
                     width: 280,
                     height: 100,
@@ -217,7 +217,7 @@ function DrawerContent(props) {
                   }}
                   resizeMode="contain"
                   source={require("../../assets/img/Central156_com_brasao.png")}
-                />
+                /> */}
                 <View
                   style={{
                     marginLeft: 10,
@@ -234,6 +234,20 @@ function DrawerContent(props) {
       </DrawerContentScrollView>
       {user.isLoggedIn && (
         <View style={styles.bottomDrawerSection}>
+          <DrawerItem
+            icon={({ color, size }) => (
+              <Icon name="file-search-outline" color={color} size={size} />
+            )}
+            label="Consulta Protocolo"
+            onPress={() => navigation.navigate("ConsultaProtocolo")}
+          />
+          <DrawerItem
+            icon={({ color, size }) => (
+              <Icon name="account-circle-outline" color={color} size={size} />
+            )}
+            label="Meu cadastro"
+            onPress={() => navigation.navigate("Profile")}
+          />
           <DrawerItem
             icon={({ color, size }) => (
               <Icon name="exit-to-app" color={color} size={size} />

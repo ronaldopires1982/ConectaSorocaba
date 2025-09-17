@@ -6,9 +6,8 @@ import {
   Image,
   Alert,
   ScrollView,
-  Modal,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { Camera } from "expo-camera";
@@ -26,7 +25,7 @@ const { brand, primary, darkLight } = Colors;
 
 const MAX_PHOTOS = 3;
 const MAX_DOCUMENTS = 3;
-const MAX_PHOTO_SIZE = 1 * 1024 * 1024; // 1MB in bytes
+const MAX_PHOTO_SIZE = 4 * 1024 * 1024; // 4MB in bytes
 const MAX_DOC_SIZE = 3 * 1024 * 1024; // 3MB in bytes
 
 export const AnexarArquivos = ({
@@ -84,7 +83,7 @@ export const AnexarArquivos = ({
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 0.8,
-      allowsEditing: true,
+      allowsEditing: false,
     });
 
     if (!result.canceled) {

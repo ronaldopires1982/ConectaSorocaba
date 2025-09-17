@@ -363,30 +363,6 @@ export const formatFileSize = (fileSize) => {
   return fileSize;
 };
 
-// Função comentada para avaliação se pode ser removida ou não
-
-// /**
-//  * Formata data de upload para exibição
-//  * @param {string} dateString - Data no formato ISO
-//  * @returns {string} Data formatada
-//  */
-// export const formatUploadDate = (dateString) => {
-//   if (!dateString) return "";
-//
-//   try {
-//     const date = new Date(dateString);
-//     return date.toLocaleDateString("pt-BR", {
-//       day: "2-digit",
-//       month: "2-digit",
-//       year: "numeric",
-//       hour: "2-digit",
-//       minute: "2-digit",
-//     });
-//   } catch (error) {
-//     return dateString;
-//   }
-// };
-
 /**
  * Determina o ícone apropriado para o tipo de arquivo
  * @param {string} mimeType - Tipo MIME do arquivo

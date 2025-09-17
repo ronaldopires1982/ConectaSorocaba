@@ -49,11 +49,11 @@ const styles = StyleSheet.create({
     aspectRatio: 1.6, // Mantém a proporção do cartão (largura:altura)
     alignSelf: "center", // alinha o cartão horizontalmente
     borderRadius: 15,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    // shadowColor: "#000",
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
+    // elevation: 5,
   },
   cardImage: {
     width: "100%",

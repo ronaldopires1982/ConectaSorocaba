@@ -1,5 +1,5 @@
 // src/components/CartaoCidadao.js
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { SignInContext } from "../hooks/SignInContext";
 

@@ -99,7 +99,7 @@ const SignUpAddress = ({ navigation }) => {
     });
     console.log(data);
     console.log("Erro do campo cep:", errors.cep);
-    navigation.navigate("SignUpTerms");
+    navigation.navigate("SignUpSelfie");
   };
 
   return (

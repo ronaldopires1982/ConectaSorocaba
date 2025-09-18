@@ -21,9 +21,12 @@ import { EscolhaAssunto } from "../screens/Central156/NovaSolicitacao/EscolhaAss
 import { FormSolicitacao } from "../screens/Central156/NovaSolicitacao/FormSolicitacao";
 import { AnexarArquivos } from "../screens/Central156/NovaSolicitacao/AnexarArquivos";
 import { MinhasSolicitacoes } from "../screens/Central156/MinhasSolicitacoes/MinhasSolicitacoes";
+
+//imports para novo cadastro de munícipe
 import SignUp from "../screens/ConectaSorocaba/NovoCadastro/DadosPessoais";
 import SignUpContacts from "../screens/ConectaSorocaba/NovoCadastro/DadosContato";
 import SignUpAddress from "../screens/ConectaSorocaba/NovoCadastro/Endereco";
+import SignUpSelfie from "../screens/ConectaSorocaba/NovoCadastro/Selfie";
 import SignUpTerms from "../screens/ConectaSorocaba/NovoCadastro/TermosUso";
 import SignUpPassword from "../screens/ConectaSorocaba/NovoCadastro/Senha";
 import ConsultaProtocolo from "../screens/Central156/ConsultaProtocolo/ConsultaProtocolo";
@@ -358,6 +361,26 @@ export const StackNav = ({ navigation }) => {
         component={SignUpAddress}
         options={{
           headerTitle: "Endereço Residencial",
+          headerLeft: () => null,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          transitionSpec: {
+            open: {
+              animation: "timing",
+              config: { duration: 600 },
+            },
+            close: {
+              animation: "timing",
+              config: { duration: 600 },
+            },
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="SignUpSelfie"
+        component={SignUpSelfie}
+        options={{
+          headerTitle: "Capture sua selfie",
           headerLeft: () => null,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           transitionSpec: {

@@ -22,6 +22,7 @@ function SignUpProvider({ children }) {
     cidade: "",
     uf: "",
     referencia: "",
+    selfieUri: null,
     password: "",
     confirmPassword: "",
     acceptTerms: false,
@@ -53,6 +54,7 @@ function SignUpProvider({ children }) {
       cidade: "",
       uf: "",
       referencia: "",
+      selfieUri: null,
       password: "",
       confirmPassword: "",
     });

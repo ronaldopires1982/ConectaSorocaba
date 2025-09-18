@@ -116,3 +116,6 @@ fastlane/test_output
 # EAS Build artifacts
 dist/
 build-artifacts/
+
+# arquivos pesados de screenshots
+Screenshots/

@@ -45,8 +45,12 @@ export class SelfieManager {
       const localUri = SELFIE_DIRECTORY + fileName;
 
       console.log(
-        "[SelfieManager] - Diretório de selfies inicializado em:",
+        "[SelfieManager] - Diretório de selfies inicializado51651651 em:",
         SELFIE_DIRECTORY
+      );
+      console.log(
+        "[SelfieManager] - Local URI (caminho relativo completo):",
+        localUri
       );
 
       // Copia a imagem para o diretório local
@@ -75,6 +79,12 @@ export class SelfieManager {
     try {
       // Primeiro, tenta buscar do AsyncStorage
       const storedPath = await AsyncStorage.getItem(SELFIE_KEY_PREFIX + cpf);
+
+      const allSelfies = await SelfieManager.listAllSelfies();
+      console.log(
+        "[CartaoCidadao] - Todas as selfies encontradas:",
+        allSelfies
+      );
 
       if (storedPath) {
         // Verifica se o arquivo ainda existe
@@ -148,6 +158,12 @@ export class SelfieManager {
    */
   static async hasSelfie(cpf) {
     const selfieUri = await this.getSelfie(cpf);
+    console.log(
+      "[SelfieManager] - Verifica se há selfie para o CPF ",
+      cpf,
+      ":",
+      selfieUri
+    );
     return selfieUri !== null;
   }
 

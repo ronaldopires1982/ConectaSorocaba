@@ -69,6 +69,16 @@ const Home = ({ navigation }) => {
           >
             <ButtonText style={{ fontSize: 20 }}>Acessar Central156</ButtonText>
           </StyledButton>
+          <StyledButton
+            onPress={() => navigation.navigate("SignUpSelfie")}
+            style={{
+              backgroundColor: brand,
+              height: 100,
+              width: "90%",
+            }}
+          >
+            <ButtonText style={{ fontSize: 20 }}>Testar Selfie</ButtonText>
+          </StyledButton>
         </View>
       </View>
     </View>

@@ -1,8 +1,8 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import {
   Alert,
-  Button,
   Dimensions,
+  Image,
   Platform,
   StatusBar as RNStatusBar,
   StyleSheet,
@@ -10,9 +10,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+import Svg, { Defs, Mask, Rect, Ellipse } from "react-native-svg";
 import { SignUpContext } from "../../../hooks/SignUpContext";
 import { SelfieManager } from "../../../utils/SelfieManager";
 import { Colors } from "../../../components/estilos";
@@ -23,13 +24,14 @@ const { brand, primary, darkLight, tertiary, customGreen } = Colors;
 // Constantes para definir formato do enquadramento oval
 const FRAME_WIDTH = width * 0.7;
 const FRAME_HEIGHT = FRAME_WIDTH * 1.2;
-const FRAME_TOP = (height - FRAME_HEIGHT) / 2 - 50;
 
 export default function SignUpSelfie({ navigation }) {
   const [facing, setFacing] = useState("front");
   const [permission, requestPermission] = useCameraPermissions();
   const [isCapturing, setIsCapturing] = useState(false);
   const { formData, updateFormData } = useContext(SignUpContext);
+  const [capturedPhoto, setCapturedPhoto] = useState(null);
+  const [showPreview, setShowPreview] = useState(false);
 
   const cameraRef = useRef(null);
 
@@ -93,25 +95,9 @@ export default function SignUpSelfie({ navigation }) {
       console.log("[Selfie] Foto tirada:", photo);
 
       if (photo && photo.uri) {
-        console.log("[Selfie] Tirando foto...");
-        // Grava a foto utilizando o SelfieManager.js
-        const savedUri = await SelfieManager.saveSelfie(
-          photo.uri,
-          formData.cpf
-        );
-
-        if (savedUri) {
-          updateFormData({ selfieUri: savedUri });
-
-          // Navega para a próxima tela
-          navigation.navigate("SignUpTerms");
-        } else {
-          Alert.alert(
-            "Erro",
-            "Não foi possível salvar a selfie. Tente novamente.",
-            [{ text: "OK" }]
-          );
-        }
+        // Exibe a pré-visualização da foto capturada
+        setCapturedPhoto(photo);
+        setShowPreview(true);
       }
     } catch (error) {
       console.error("Erro ao capturar selfie:", error);
@@ -125,22 +111,134 @@ export default function SignUpSelfie({ navigation }) {
     }
   };
 
-  return (
-    <View style={styles.container}>
+  const confirmSelfie = async () => {
+    if (!capturedPhoto) return;
+
+    try {
+      console.log("[Selfie] Salvando selfie confirmada...");
+
+      const savedUri = await SelfieManager.saveSelfie(
+        capturedPhoto.uri,
+        formData.cpf
+      );
+
+      if (savedUri) {
+        updateFormData({ selfieUri: savedUri });
+        navigation.navigate("SignUpTerms");
+      } else {
+        Alert.alert(
+          "Erro",
+          "Não foi possível salvar a selfie. Tente novamente.",
+          [{ text: "OK" }]
+        );
+      }
+    } catch (error) {
+      console.error("Erro ao salvar selfie:", error);
+      Alert.alert(
+        "Erro",
+        "Não foi possível salvar a selfie. Tente novamente.",
+        [{ text: "OK" }]
+      );
+      setShowPreview(false);
+      setCapturedPhoto(null);
+    }
+  };
+
+  // Função para recapturar a selfie
+  const retakeSelfie = () => {
+    setShowPreview(false);
+    setCapturedPhoto(null);
+  };
+
+  const renderOvalMask = () => {
+    <Svg
+      height={height}
+      width={width}
+      style={StyleSheet.absoluteFill}
+      pointerEvents="none"
+    >
+      <Defs>
+        <Mask id="mask" x="0" y="0" height="100%" width="100%">
+          <Rect height="100%" width="100%" fill="#fff" />
+          <Ellipse
+            cx={width / 2}
+            cy={height / 2}
+            rx={(FRAME_WIDTH - 20) / 2}
+            ry={(FRAME_HEIGHT - 20) / 2}
+            fill="black"
+          />
+        </Mask>
+      </Defs>
+      <Rect
+        height="100%"
+        width="100%"
+        fill="rgba(0,0,0,0.6)"
+        mask="url(#mask)"
+      />
+    </Svg>;
+  };
+
+  const renderPreview = () => (
+    <View style={previewStyles.previewContainer}>
       <StatusBar style="light" />
-      <CameraView
-        ref={cameraRef}
-        style={styles.camera}
-        facing={facing}
-        ratio="16:9"
+
+      {/* Preview da selfie capturada */}
+      <Image
+        source={{ uri: capturedPhoto.uri }}
+        style={previewStyles.previewImage}
+        resizeMode="cover"
       />
 
-      {/* Sobreposição com enquadramento oval */}
-      <View style={styles.overlay}>
-        {/* Área mais escura ao redor do oval */}
-        <View style={styles.overlayTop} />
-        <View style={styles.overlayMiddle}>
-          <View style={styles.overlayLeft} />
+      {/* Botões de confirmação e recaptura */}
+      <View style={previewStyles.previewOverlay}>
+        <View style={previewStyles.previewHeader}>
+          <Text style={previewStyles.previewTitle}>Confirme sua selfie</Text>
+          <Text style={previewStyles.previewSubtitle}>
+            Confirme se a foto está boa ou faça uma nova captura
+          </Text>
+        </View>
+
+        {/* Botão de recaptura */}
+        <View style={previewStyles.previewControls}>
+          <TouchableOpacity
+            style={previewStyles.retakeButton}
+            onPress={retakeSelfie}
+            activeOpacity={0.8}
+          >
+            <Feather name="camera" size={20} color="#FFF" />
+            <Text style={previewStyles.retakeButtonText}>Nova selfie</Text>
+          </TouchableOpacity>
+
+          {/* Botão de confirmação */}
+          <TouchableOpacity
+            style={previewStyles.confirmButton}
+            onPress={confirmSelfie}
+            activeOpacity={0.8}
+          >
+            <Feather name="check" size={20} color="#FFF" />
+            <Text style={previewStyles.confirmButtonText}>Confirmar</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      {showPreview ? (
+        renderPreview()
+      ) : (
+        <>
+          <StatusBar style="light" />
+          <CameraView
+            ref={cameraRef}
+            style={styles.camera}
+            facing={facing}
+            ratio="16:9"
+          />
+
+          {/* Máscara oval usando SVG */}
+          {renderOvalMask()}
 
           {/* Enquadramento oval */}
           <View style={styles.frameContainer}>
@@ -149,60 +247,52 @@ export default function SignUpSelfie({ navigation }) {
             </View>
           </View>
 
-          <View style={styles.overlayRight} />
-        </View>
-        <View style={styles.overlayBottom} />
-      </View>
-
-      {/* Instruções para a foto */}
-      <View style={styles.instructionsContainer}>
-        <Text style={styles.instructionsText}>
-          Posicione seu rosto dentro da área oval
-        </Text>
-        <Text style={styles.instructionsSubtext}>
-          Posicione-se em local com boa iluminação e olhe diretamente para a
-          câmera
-        </Text>
-      </View>
-
-      {/* Botões de controle */}
-      <View style={styles.controlsContainer}>
-        {/* Botão para trocar de câmera */}
-        <TouchableOpacity
-          style={styles.flipButton}
-          onPress={toggleCameraFacing}
-        >
-          <MaterialIcons name="flip-camera-ios" size={32} color={primary} />
-        </TouchableOpacity>
-
-        {/* Botão de captura */}
-        <TouchableOpacity
-          style={[
-            styles.captureButton,
-            isCapturing && styles.captureButtonDisabled,
-          ]}
-          onPress={takePicture}
-          disabled={isCapturing}
-          activeOpacity={0.8}
-        >
-          <View style={styles.captureButtonInner}>
-            {isCapturing ? (
-              <Feather name="loader" size={32} color={primary} />
-            ) : (
-              <Feather name="camera" size={32} color={primary} />
-            )}
+          <View style={styles.instructionsContainer}>
+            <Text style={styles.instructionsText}>
+              Posicione seu rosto dentro da área oval
+            </Text>
+            <Text style={styles.instructionsSubtext}>
+              Posicione-se em local com boa iluminação e olhe diretamente para a
+              câmera
+            </Text>
           </View>
-        </TouchableOpacity>
 
-        {/* Botão para voltar/cancelar */}
-        <TouchableOpacity
-          style={styles.cancelButton}
-          onPress={() => navigation.goBack()}
-          activityOpacity={0.7}
-        >
-          <Feather name="x" size={32} color={primary} />
-        </TouchableOpacity>
-      </View>
+          <View style={styles.controlsContainer}>
+            <TouchableOpacity
+              style={styles.flipButton}
+              onPress={toggleCameraFacing}
+            >
+              <MaterialIcons name="flip-camera-ios" size={32} color={primary} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.captureButton,
+                isCapturing && styles.captureButtonDisabled,
+              ]}
+              onPress={takePicture}
+              disabled={isCapturing}
+              activeOpacity={0.8}
+            >
+              <View style={styles.captureButtonInner}>
+                {isCapturing ? (
+                  <Feather name="loader" size={32} color={primary} />
+                ) : (
+                  <Feather name="camera" size={32} color={primary} />
+                )}
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={() => navigation.goBack()}
+              activeOpacity={0.7}
+            >
+              <Feather name="x" size={32} color={primary} />
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </View>
   );
 }
@@ -264,27 +354,15 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "transparent",
-  },
-  overlayTop: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
-  },
-  overlayMiddle: {
-    height: FRAME_HEIGHT,
-    flexDirection: "row",
-  },
-  overlayLeft: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
-  },
   frameContainer: {
+    position: "absolute",
+    top: (height - FRAME_HEIGHT) / 2,
+    left: (width - FRAME_WIDTH) / 2,
     width: FRAME_WIDTH,
     height: FRAME_HEIGHT,
     justifyContent: "center",
     alignItems: "center",
+    pointerEvents: "none",
   },
   ovalFrame: {
     width: FRAME_WIDTH - 20,
@@ -308,14 +386,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.3)",
     backgroundColor: "transparent",
-  },
-  overlayRight: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
-  },
-  overlayBottom: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
   },
   instructionsContainer: {
     position: "absolute",
@@ -400,5 +470,84 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 2,
     borderColor: "rgba(255, 255, 255, 0.3)",
+  },
+});
+
+const previewStyles = StyleSheet.create({
+  previewContainer: {
+    flex: 1,
+    backgroundColor: "#000",
+  },
+  previewImage: {
+    flex: 1,
+    width: "100%",
+  },
+  previewOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    justifyContent: "space-between",
+    paddingTop: Platform.OS === "ios" ? 60 : 40,
+    paddingBottom: 40,
+    paddingHorizontal: 20,
+  },
+  previewHeader: {
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  previewTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#FFF",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  previewSubtitle: {
+    fontSize: 16,
+    color: "rgba(255, 255, 255, 0.8)",
+    textAlign: "center",
+    lineHeight: 22,
+  },
+  previewControls: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 20, // Modern gap property for consistent spacing
+    paddingHorizontal: 10,
+  },
+  retakeButton: {
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 25,
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "rgba(255, 255, 255, 0.3)",
+    flex: 1,
+    maxWidth: 140,
+    justifyContent: "center",
+  },
+  retakeButtonText: {
+    color: "#FFF",
+    fontSize: 14,
+    fontWeight: "600",
+    marginLeft: 6,
+  },
+  confirmButton: {
+    backgroundColor: customGreen,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 25,
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+    maxWidth: 140,
+    justifyContent: "center",
+  },
+  confirmButtonText: {
+    color: "#FFF",
+    fontSize: 14,
+    fontWeight: "600",
+    marginLeft: 6,
   },
 });

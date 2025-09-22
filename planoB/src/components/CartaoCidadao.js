@@ -145,8 +145,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   selfieImage: {
-    width: 70,
-    height: 70,
+    width: 75,
+    height: 75,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "#ffffff",

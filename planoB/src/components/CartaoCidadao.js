@@ -1,11 +1,22 @@
 // src/components/CartaoCidadao.js
 import React, { useContext, useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { SignInContext } from "../hooks/SignInContext";
 import { SelfieManager } from "../utils/SelfieManager";
 
-const CartaoCidadaoComponent = () => {
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+
+const CartaoCidadaoComponent = ({ isFullScreen = false }) => {
   const { user } = useContext(SignInContext);
+  const navigation = useNavigation();
   const [selfieUri, setSelfieUri] = useState(null);
   const [isLoadingSelfie, setIsLoadingSelfie] = useState(true);
 
@@ -51,6 +62,14 @@ const CartaoCidadaoComponent = () => {
     }
   };
 
+  const handleCardPress = () => {
+    if (!isFullScreen) {
+      navigation.navigate("CartaoFullScreen");
+    } else {
+      navigation.goBack();
+    }
+  };
+
   useEffect(() => {
     if (user?.cpf) {
       loadUserSelfie();
@@ -59,30 +78,77 @@ const CartaoCidadaoComponent = () => {
     }
   }, [user?.cpf]);
 
+  // Estilos dinâmicos para o modo full screen
+  const containerStyle = [
+    isFullScreen ? styles.containerFullScreen : styles.container,
+  ];
+
+  const cardImageStyle = [
+    isFullScreen ? styles.cardImageFullScreen : styles.cardImage,
+  ];
+
+  const userInfoContainerStyle = [
+    isFullScreen
+      ? styles.userInfoContainerFullScreen
+      : styles.userInfoContainer,
+  ];
+
+  const selfieContainerStyle = [
+    isFullScreen ? styles.selfieContainerFullScreen : styles.selfieContainer,
+  ];
+
+  const selfieImageStyle = [
+    isFullScreen ? styles.selfieImageFullScreen : styles.selfieImage,
+  ];
+
+  const placeholderAvatarStyle = [
+    isFullScreen
+      ? styles.placeholderAvatarFullScreen
+      : styles.placeholderAvatar,
+  ];
+
+  const placeholderTextStyle = [
+    isFullScreen ? styles.placeholderTextFullScreen : styles.placeholderText,
+  ];
+
+  const userNameStyle = [
+    isFullScreen ? styles.userNameFullScreen : styles.userName,
+  ];
+
+  const userCPFStyle = [
+    isFullScreen ? styles.userCPFFullScreen : styles.userCPF,
+  ];
+
+  const CardWrapper = isFullScreen ? View : TouchableOpacity;
+
   return (
-    <View style={styles.container}>
+    <CardWrapper
+      style={containerStyle}
+      onPress={handleCardPress}
+      activeOpacity={!isFullScreen ? 0.8 : 1}
+    >
       {/* Imagem do cartão em background */}
       <Image
         source={require("../../assets/img/cartao_cidadao.png")}
         resizeMode="cover"
-        style={styles.cardImage}
+        style={cardImageStyle}
       />
 
       {/* Informações do munícipes sobrepostas ao cartão */}
       <View style={styles.overlay}>
-        <View style={styles.userInfoContainer}>
+        <View style={userInfoContainerStyle}>
           {/* Selfie do munícipe */}
-          <View style={styles.selfieContainer}>
+          <View style={selfieContainerStyle}>
             {selfieUri ? (
               <Image
                 source={{ uri: selfieUri }}
-                style={styles.selfieImage}
+                style={selfieImageStyle}
                 resizeMode="cover"
               />
             ) : (
-              <View style={styles.placeholderAvatar}>
+              <View style={placeholderAvatarStyle}>
                 {/* Busca as iniciais do nome para exibir como placeholder do avatar */}
-                <Text style={styles.placeholderText}>
+                <Text style={placeholderTextStyle}>
                   {getFullName()
                     .split(" ")
                     .map((name) => name.charAt(0))
@@ -95,23 +161,24 @@ const CartaoCidadaoComponent = () => {
           </View>
           {/* Nome e CPF do munícipe */}
           <View style={styles.textInfoContainer}>
-            <Text style={styles.userName}>{getFullName()}</Text>
-            <Text style={styles.userCPF}>
+            <Text style={userNameStyle}>{getFullName()}</Text>
+            <Text style={userCPFStyle}>
               CPF: {formatCPFForDisplay(user?.cpf) || "000.000.000-00"}
             </Text>
           </View>
         </View>
       </View>
-    </View>
+    </CardWrapper>
   );
 };
 
 const styles = StyleSheet.create({
+  // Estilos para exibição normal
   container: {
     position: "relative",
     width: "100%",
-    aspectRatio: 1.6, // Mantém a proporção do cartão (largura:altura)
-    alignSelf: "center", // alinha o cartão horizontalmente
+    aspectRatio: 1.6,
+    alignSelf: "center",
     borderRadius: 15,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -122,21 +189,11 @@ const styles = StyleSheet.create({
   cardImage: {
     width: "100%",
     height: "100%",
-    borderRadius: 15, //mantendo a consistência do arredondamento com o container
-  },
-  overlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: "flex-end",
-    alignItems: "flex-start",
+    borderRadius: 15,
   },
   userInfoContainer: {
     flexDirection: "column",
     alignItems: "flex-start",
-    // backgroundColor: "rgba(255, 255, 255, 0.8)", // Fundo branco semi-transparente para melhor legibilidade
     paddingLeft: 20,
     paddingBottom: 20,
     paddingRight: 20,
@@ -166,9 +223,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#333333",
   },
-  textInfoContainer: {
-    alignItems: "flex-start",
-  },
   userName: {
     fontSize: 18,
     fontWeight: "bold",
@@ -181,10 +235,95 @@ const styles = StyleSheet.create({
   userCPF: {
     fontSize: 14,
     color: "#333333",
-    fontFamily: "monospace", // Tipo de fonte adequada para números
+    fontFamily: "monospace",
     textShadowColor: "rgba(255, 255, 255, 0.8)",
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 2,
+  },
+
+  // Estilos para exibição em tela cheia
+  containerFullScreen: {
+    position: "relative",
+    width: SCREEN_HEIGHT * 0.65,
+    height: (SCREEN_HEIGHT * 0.65) / 1.6,
+    alignSelf: "center",
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.5,
+    shadowRadius: 15,
+    elevation: 20,
+    transform: [{ rotate: "90deg" }],
+  },
+  cardImageFullScreen: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 20,
+  },
+  userInfoContainerFullScreen: {
+    flexDirection: "column",
+    alignItems: "center",
+    paddingLeft: 40,
+    paddingBottom: 30,
+    paddingRight: 40,
+    alignItems: "flex-start",
+  },
+  selfieContainerFullScreen: {
+    marginRight: 30,
+    marginBottom: 15,
+  },
+  selfieImageFullScreen: {
+    width: 120,
+    height: 120,
+    borderRadius: 15,
+    borderWidth: 3,
+    borderColor: "#ffffff",
+  },
+  placeholderAvatarFullScreen: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: "rgba(255,255,255,0.9)",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 3,
+    borderColor: "#ffffff",
+  },
+  placeholderTextFullScreen: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#333333",
+  },
+  userNameFullScreen: {
+    fontSize: 32,
+    fontWeight: "bold",
+    color: "#000000",
+    marginBottom: 12,
+    textShadowColor: "rgba(255, 255, 255, 0.9)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
+  userCPFFullScreen: {
+    fontSize: 22,
+    color: "#333333",
+    fontFamily: "monospace",
+    textShadowColor: "rgba(255, 255, 255, 0.9)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
+
+  // Estilos compartilhados
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "flex-end",
+    alignItems: "flex-start",
+  },
+  textInfoContainer: {
+    alignItems: "flex-start",
   },
 });
 

@@ -14,6 +14,7 @@ import { DrawerActions, useNavigationState } from "@react-navigation/native";
 import Home from "../screens/Central156/Home";
 import { LoginSuiteCRM } from "../screens/Central156/Login/LoginSuiteCRM";
 import { Welcome } from "../screens/Central156/Login/BemVindo";
+import CartaoFullScreen from "../screens/Central156/Login/CartaoFullScreen";
 import { AbrirSolicitacao1 } from "../screens/Central156/NovaSolicitacao/AbrirSolicitacao1";
 import { AbrirSolicitacao2 } from "../screens/Central156/NovaSolicitacao/AbrirSolicitacao2";
 import { AbrirSolicitacao3 } from "../screens/Central156/NovaSolicitacao/AbrirSolicitacao3";
@@ -37,7 +38,6 @@ import Profile from "../screens/Central156/AtualizaMunicipe/DadosPerfil";
 import EditProfile from "../screens/Central156/AtualizaMunicipe/EditaPerfil";
 import NotificationsScreen from "../screens/Central156/MinhasNotificacoes/NotificationScreen";
 import AdditionalInfoNotification from "../screens/Central156/MinhasNotificacoes/AdditionalInfoNotification";
-import NotificationDemo from "../components/notifications/NotificationDemo";
 
 // imports dos componentes e hooks
 import { Colors } from "../components/estilos";
@@ -165,15 +165,6 @@ export const StackNav = ({ navigation }) => {
         }}
       />
 
-      <Stack.Screen
-        name="NotificationDemo"
-        component={NotificationDemo}
-        options={{
-          headerTitle: "Demonstração de Notificações",
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        }}
-      />
-
       {/* view para consulta protocolo sem logar */}
       <Stack.Screen
         name="ConsultaProtocolo"
@@ -220,6 +211,28 @@ export const StackNav = ({ navigation }) => {
                 />
               </View>
             );
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="CartaoFullScreen"
+        component={CartaoFullScreen}
+        options={{
+          // headerShown: false,
+          headerTitleStyle: {
+            fontSize: 20,
+            color: brand,
+            fontWeight: "bold",
+          },
+          headerTitle: "Meu cartão cidadão",
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          transitionSpec: {
+            open: {
+              animation: "timing",
+              config: { duration: 300 },
+            },
+            close: { animation: "timing", config: { duration: 300 } },
           },
         }}
       />
